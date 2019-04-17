@@ -1,0 +1,37 @@
+# enable CronTab jobs for Dydns to ipTables script
+# SSH Script
+sudo echo '*/5 * * * * root /etc/iptables_update_ssh.sh > /dev/null 2>&1' | sudo tee /etc/crontab
+# Port 8443 Script
+sudo echo '*/5 * * * * root /etc/iptables_update_8443.sh > /dev/null 2>&1' | sudo tee /etc/crontab
+
+# Create Log Files for iptables_update_ssh & 8443
+sudo touch /var/log/dydns2iptables_ssh.log
+sudo touch /var/log/dydns2iptables_8443.log
+
+#=================================================================================================================
+#   Sample Dydns to ipTables Script
+#=================================================================================================================
+#
+##!/bin/bash
+#HOSTNAME=YourDomain.com
+#LOGFILE=/var/log/dydns2iptables_ssh.log
+#Current_IP=$(host $HOSTNAME | head -n1 | cut -f4 -d ' ')
+#
+#if [ ! -f $LOGFILE ]; then
+#    /usr/sbin/ufw allow from $Current_IP to any port 22 proto tcp
+#    echo $Current_IP $(date) > $LOGFILE
+#else
+#
+#    Old_IP=$(cat $LOGFILE)
+#    if [ "$Current_IP" = "$Old_IP" ] ; then
+#        echo IP address has not changed $(date)
+#    else
+#        /usr/sbin/ufw delete allow from $Old_IP to any port 22 proto tcp
+#        /usr/sbin/ufw allow from $Current_IP to any port 22 proto tcp
+#        echo $Current_IP $(date) > $LOGFILE
+#        echo iptables have been updated $(date)
+#    fi
+#fi
+#
+# Cron Job Settings, ipTables Script for DyDNS to ipTables
+# Source: https://unix.stackexchange.com/a/352836
